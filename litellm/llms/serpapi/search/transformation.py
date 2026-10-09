@@ -111,7 +111,7 @@ class SerpApiSearchConfig(BaseSearchConfig):
 
         domains: Final = optional_params.get("search_domain_filter")
         q_final: Final = (
-            f"({q_str}) ({" OR ".join(f"site:{d}" for d in domains)})"  # pyright: ignore[reportUnknownVariableType]  # items are strings
+            f"({q_str}) ({' OR '.join(f'site:{d}' for d in domains)})"  # pyright: ignore[reportUnknownVariableType]  # items are strings
             if isinstance(domains, list) and len(domains) > 0  # pyright: ignore[reportUnknownArgumentType]  # domains is a list
             else q_str
         )
@@ -135,7 +135,11 @@ class SerpApiSearchConfig(BaseSearchConfig):
             and param not in optional_mappings
         }
 
-        request_data: Final[dict[str, object]] = {**base_params, **optional_mappings, **extra_params}  # mutable-ok: mapping type
+        request_data: Final[dict[str, object]] = {  # mutable-ok: mapping type
+            **base_params,
+            **optional_mappings,
+            **extra_params,
+        }
 
         return {"_serpapi_params": request_data}
 
