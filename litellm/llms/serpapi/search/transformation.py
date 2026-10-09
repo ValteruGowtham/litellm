@@ -157,15 +157,24 @@ class SerpApiSearchConfig(BaseSearchConfig):
         """
         response_json: Final = raw_response.json()
 
+        results_list: Final = (  # pyright: ignore[reportUnknownVariableType]  # standard response shape
+            response_json.get("organic_results")
+            or response_json.get("news_results")
+            or response_json.get("shopping_results")
+            or response_json.get("local_results")
+            or response_json.get("jobs_results")
+            or []
+        )
+
         results: Final = [
             SearchResult(
-                title=result.get("title", ""),
-                url=result.get("link", ""),
-                snippet=result.get("snippet", ""),
-                date=result.get("date"),
+                title=result.get("title", ""),  # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]  # parsing generic json dict
+                url=result.get("link", ""),  # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]  # parsing generic json dict
+                snippet=result.get("snippet", ""),  # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]  # parsing generic json dict
+                date=result.get("date"),  # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]  # parsing generic json dict
                 last_updated=None,
             )
-            for result in response_json.get("organic_results", [])
+            for result in results_list  # pyright: ignore[reportUnknownVariableType]  # iterating generic json array
         ]
 
         return SearchResponse(

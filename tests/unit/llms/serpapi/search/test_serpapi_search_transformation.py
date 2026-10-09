@@ -236,6 +236,29 @@ class TestSerpApiSearchConfig:
         assert result.results[1].url == "https://example.com/2"
         assert result.results[1].date is None
 
+    def test_transform_search_response_shopping_results(self):
+        config = SerpApiSearchConfig()
+
+        mock_response = Mock(spec=httpx.Response)
+        mock_response.json.return_value = {
+            "shopping_results": [
+                {
+                    "title": "Shopping Result 1",
+                    "link": "https://example.com/shop",
+                    "snippet": "Buy this thing",
+                }
+            ]
+        }
+
+        result = config.transform_search_response(
+            raw_response=mock_response,
+            logging_obj=MagicMock(),
+        )
+
+        assert isinstance(result, SearchResponse)
+        assert len(result.results) == 1
+        assert result.results[0].title == "Shopping Result 1"
+
     def test_transform_search_response_empty_results(self):
         config = SerpApiSearchConfig()
 
