@@ -4317,6 +4317,7 @@ class SearchProviders(str, Enum):
     DUCKDUCKGO = "duckduckgo"
     SEARCHAPI = "searchapi"
     SERPER = "serper"
+    SERPAPI = "serpapi"
     YOU_COM = "you_com"
     APISERPENT = "apiserpent"
     TINYFISH = "tinyfish"
